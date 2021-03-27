@@ -147,7 +147,7 @@ The overall architecture is shown in Figure 2-4 below:
 
 
 
-![image-20210327154959743](research and simulation of Cyberattacks in VANET.assets/image-20210327154959743.png)
+![image-20210327154959743](./research and simulation of Cyberattacks in VANET.assets/image-20210327154959743.png)
 
 Figure 2-4 structure of simulation platform
 
@@ -159,7 +159,7 @@ OMNeT++ (Objective Modular Network Testbed in C++) is an extensible, modular, co
 
 
 
-![image-20210327155202985](research and simulation of Cyberattacks in VANET.assets/image-20210327155202985.png)
+![image-20210327155202985](./research and simulation of Cyberattacks in VANET.assets/image-20210327155202985.png)
 
 Figure 2-5 Omnet++ structure
 
