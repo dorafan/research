@@ -93,7 +93,7 @@ The DSRC/WAVE protocol stack is shown in Figure 2-1 [5]:
 
 
 
-![image-20210327154056838](research and simulation of Cyberattacks in VANET.assets/image-20210327154056838.png)
+![image-20210327154056838](vanet.assets/image-20210327154056838.png)
 
 Figure 2-1 DSRC/WAVE protocol stack
 
@@ -113,7 +113,7 @@ The EEE 1609 standard is a high-level standard based on the 802.11p protocol; th
 
 
 
-![image-20210327154035679](research and simulation of Cyberattacks in VANET.assets/image-20210327154035679.png)
+![image-20210327154035679](vanet.assets/image-20210327154035679.png)
 
 Figure 2-2 FCC 
 
@@ -131,7 +131,7 @@ The IEEE1609 protocol family is mainly composed of four parts [7]:
 
 
 
-![image-20210327154520143](research and simulation of Cyberattacks in VANET.assets/image-20210327154520143.png)
+![image-20210327154520143](vanet.assets/image-20210327154520143.png)
 
 Figure 2-3 structure of 1609 protocol
 
@@ -147,7 +147,7 @@ The overall architecture is shown in Figure 2-4 below:
 
 
 
-![image-20210327154959743](./research and simulation of Cyberattacks in VANET.assets/image-20210327154959743.png)
+![image-20210327154959743](./vanet.assets/image-20210327154959743.png)
 
 Figure 2-4 structure of simulation platform
 
@@ -159,7 +159,7 @@ OMNeT++ (Objective Modular Network Testbed in C++) is an extensible, modular, co
 
 
 
-![image-20210327155202985](./research and simulation of Cyberattacks in VANET.assets/image-20210327155202985.png)
+![image-20210327155202985](./vanet.assets/image-20210327155202985.png)
 
 Figure 2-5 Omnet++ structure
 
