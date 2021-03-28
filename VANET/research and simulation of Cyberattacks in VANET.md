@@ -359,12 +359,317 @@ In Figure 3-4 above, the black vehicles are malicious nodes, the gray vehicles a
 
 The message delivery and events in the entire attack process are shown in the following figure 3-5:
 
-1. The yellow malicious node launches a DDoS attack on the attacked node.
-2. The vehicle node at the head of the team has a traffic accident and sends a safety broadcast to the subsequent vehicle nodes and RSU.
-3. The attacked node receives and forwards the security message broadcast by the accident node while withstanding the DDoS attack.
-4. While the malicious node continues to attack the attacked node, other nodes receive the message, broadcast and forward the message, and generate redundant information that is repeatedly received by the node. The attacked node can be within the coverage of the one-hop message of the accident node, or it can be at the remote end (relayed by other nodes). The location of the attacked node on the way is for illustration only.
+1. The yellow malicious node (black car in yellow square) launches a DDoS attack on the attacked node.
+2. The vehicle node at the head of the team has a traffic accident (black car in red square) and sends a safety broadcast to the subsequent vehicle nodes and RSU.
+3. The attacked node (red car) receives and forwards the security message broadcast by the accident node while withstanding the DDoS attack.
+4. While the malicious node continues to attack the attacked node, other nodes receive the message, broadcast and forward the message, and generate redundant information that is repeatedly received by the node. 
+
+The attacked node can be within the coverage of the one-hop message of the accident node, or it can be at the remote end (relayed by other nodes). The location of the attacked node on the way is for illustration only.
 
 
+
+![](vanet.assets/image-3-5.png)
+
+Figure 3-5 the communication process of attack scheme 2
+
+
+
+#### 3.2.3  attack scheme against RSU nodes
+
+This attack scheme is to use malicious nodes to conduct DDoS attacks on RSU nodes responsible for forwarding security messages. The specific attack process is similar to the second scenario.
+
+![](vanet.assets/image-3-6.png)
+
+Figure 3-6 attack scheme 3 model
+
+
+
+### 3.3  Design of Netwokr Performance Standard
+
+#### 3.3.1  communication delay
+
+In the VANET, WSM is responsible for disseminating traffic accident information. Therefore, the most important goal of WSM is to generate data packets in time and transmit them to other routines for processing. According to this goal, the communication delay of WSM data packet is defined as:
+
+*The time from when the message is generated, processed by the sending routine and sent over the wireless channel, to when it is received and processed by the target decoder.* 
+
+As shown in Figure 3-7 below:
+
+![](vanet.assets/image-3-7.png)
+
+
+
+𝑡𝑠:  In the simulation process, when a node triggers a traffic accident judgment (the length of the driving speed is 0>=10s), the time to generate a new safety message broadcast.
+
+𝑡𝑟:  Indicates the time when a node receives a WSM traffic safety broadcast and starts to process the message at the application layer.
+
+The time difference between the $ts$ and $td$ is $D$, and the average receiving delay of all receiving nodes for a certain safety message broadcast is $AvgD$.
+
+Since Omnit++ is a discrete event simulation platform, every discrete event will be processed sequentially. Therefore, no matter how strong the attack is, by slowing down the simulation speed, all events can always be processed. In this experiment, by defining the maximum delay limit from the occurrence of an accident to the receipt of a security message, it is judged whether the attack will affect the sending and receiving nodes and the network, that is, denial of service.
+
+
+
+#### 3.3.2  transmission performance
+
+In the VANET, there is a lot of redundant information. Each OBU node will regularly broadcast the road condition information, and other receiving nodes will relay the information to the remote node. Therefore, except for the first reception of the information packet, other information in the network is redundant to the node. In contrast, data packets sent by DDoS attacks are also redundant information for nodes.
+
+It is precisely because the network is full of redundant information that the delivery of messages in the complex and changeable ad-hoc network can be guaranteed. However, due to the existence of the conflict avoidance mechanism, the transmission of excessive redundant information also aggravates the conflict and collision of messages and squeezes the channel resources of effective information. In an ideal situation, if the maximum number of nodes can receive a message every time a message is sent, then the redundant information in the network is the least, and the transmission efficiency is the highest. Therefore, the important thing for a node is not how much information it has received, but whether it can receive valid information in time, without delay due to conflicts of redundant information, or even failing to receive valid information.
+
+On this basis, the number of valid messages in VANET is equal to the number of nodes that receive valid messages. Based on the signal-to-noise ratio formula, the design formula is as follows:
+
+![](vanet.assets/image-3-7-1.png)
+
+
+
+Consider the loss of data packets. If the channel condition is good, then more data packets can be successfully received, and the number of lost packets will be less.
+
+The larger the R value, the more nodes in the network that receive effective information, the fewer redundant packets, the lower the packet loss rate, and the higher the transmission efficiency of the entire network. The smaller the R value, the lower the network efficiency.
+
+
+
+
+
+## 4  DDoS Attack Simulation in VANET
+
+### 4.1  Design of Simulation
+
+This experiment is to explore the impact of DDoS attacks on traffic and network loops in VANET networks. According to the foregoing, the realization of the traffic flow is realized through the two-way communication between SUMO and Omnit++, so the data field of the WSM data packet can be modified to realize the reverse impact of the network attack on the traffic flow.
+
+This experiment is basically divided into two parts. One is to build a simulation environment, including Omnit++, SUMO, Veins. The second is to design and implement basic scenarios and attack schemes. Through comparative analysis of the impact of DDoS attacks on the VANET simulation environment. 
+
+
+
+### 4.2  Veins Frame Structure and Operation Process
+
+#### 4.2.1  Veins component structure
+
+Veins implements the most basic components and protocols of the VANET, and its structure is shown in Figure 4-1:
+
+![](vanet.assets/image-4-1.png)
+
+Figure 4-1 veins component structure
+
+
+
+The VANET scenario designed by `RSUExampleScenario` for Veins is an extension of the `Scenario` network scenario. RSU is added to the `Scenario` network scenario. The sub-modules included are [12]:
+
+1. `AnnotationManager` module: Animation management in Omnet++ simulation, which is used to display all the marks, icons, prompts, etc. that are generated during the simulation and need to be displayed graphically.
+
+2. `ObstacleControl` module: to realize the influence of obstacles in radio propagation, in which each obstacle is simulated as a polygon.
+
+3. `BaseWorldUtility` module: Provide information such as scene size, airborne data frame identification and corresponding scheduling use in network simulation.
+
+4. `ConnectionManager` module: Determine the communication range or the interference range between routers in the network according to the transmission power, the radio wave wavelength path loss coefficient and the minimum received power. It is used to process all the connections in the simulation and process related and packet loss operations.
+
+5. `TraCIScenarioManagerLaunchd` module: connect to the running instance in the `sumo-laumchd.py` script at the beginning and the end of the simulation, which is the `TraCIScenarioManager` module's interface to realize the automatic loading or ending of the forces in SUMO. Responsible for the two-way coupling communication and interaction with SUMO during the simulation process.
+
+6. `RSU` module: used to implement the RSU node.
+
+7. `CAR` module: used to implement the OBU subsystem.
+
+
+
+In Veins, `RSU` module and `OBU` module are composed of three modules: application layer `appl`, transport layer `nic`, and mobile control `mobility`. Among them, the nic module adopts the physical layer based on the IEEE802.11p protocol in the Internet of Vehicles and the MAC layer module based on IEEE1609. The difference between the two lies in the function of the application layer and the basis of the mobile module.
+
+The module call hierarchy of the RSU node is shown in Figure 4-2:
+
+![](vanet.assets/image-4-2.png)
+
+FIgure 4-2 RSU node module hierarchy diagram
+
+
+
+The RSU module consists of three modules: `appl`, `nic` and `mobility`.
+
+The functions of the main sub-modules are as follows:
+
+
+
+- `IdealChannel`: A theoretical channel model with no interference, no packet loss, and zero transmission time. It is a statement of a simple channel model. As the specific parameters of the channel in the Veins simulation process will continue to change with the progress of the simulation, the delay, speed and other parameters need to be adjusted continuously, which cannot be directly determined during the definition. Therefore, the IdealChannel model is used to establish a connection, and the parameters are determined in real time as the simulation progresses. As mentioned above, the terrain file `.poly.xml` in SUMO produces obstacles and transmission fading such as interference
+
+- `Nic80211p`: It is the transport layer of `OBU` (Car) module and `RSU` module, which is called through the `INic80211p` interface. It consists of two sub-modules, the MAC layer module `Mac1609_4` module and the physical layer module `PhyLayer80211p` module, which implement the WAVE protocol.
+
+![](vanet.assets/image-4-3.png)
+
+FIgure 4-3 NIC80211p structure
+
+
+
+- `BaseWaveApplLayer`: The basic class of the application layer protocol, which is inherited from the corresponding BaseApplLayer in the base library and is called through the `IBaseApplLayer` interface. It implements the basic application of the WAVE protocol. The vehicle node OBU generates the application layer description file `TraCIDemo11p` of the Car module through the expansion of the module, and the RSU node generates `TraCIDemoRSU11p`. The difference between them is that the Car module has to deal with the vehicle movement and the communication interaction caused by the movement, while the RSU module is static, and according to its definition in the WAVE protocol and related to the purpose of this experiment, it only needs to process message forwarding. Compared with the OBU module, the function of the RSU is much more single.
+
+- `BaseMobility`: control node location information. It is a static model and can only provide relevant position parameters for RSU nodes. `IMobility` is the interface of `BaseMobility`. By expanding on the basis of `BaseMobility`, it is possible to have `TraCIMobility` that describes mobile location information, which can be used by OBU nodes.
+
+
+
+Car nodes use the similar module call structure of RSU nodes, and the difference is mainly in the processing of location information and mobility. By using the `IMobility` interface, the Car node expands the `BaseMobility` module. `TraCIMobility` can monitor, increase, and control OBU nodes in the network in real time in Omnet according to the running status of SUMO.
+
+The module call hierarchy of the Car node is as shown in Figure 4-4:
+
+![](vanet.assets/image-4-4.png)
+
+Figure 4-4 Car nodes module hierarchy diagram
+
+
+
+#### 4.2.2  configuration of instances in Veins simulation 
+
+The modeling realization of the RSU module, its specific design and composition are shown in Figure 4-5:
+
+<img src="vanet.assets/image-4-5.png" style="zoom:67%;" />
+
+Figure 4-5 RSU node module structure
+
+
+
+- Application layer type of RSU node: `applType=TraCIDemoRSU11p`.
+
+
+- Location and mobility of RSU nodes: `Mobility=BaseMobility`.
+
+
+- The RSU node application layer does not send periodic messages, but sends data messages and only sends them in the CCH of the Internet of Vehicles.
+
+  That is, `appl.sendBeacons=false`, `appl.sendData=true`, `appl.dataOnSch=false`.
+
+- The data priority sent by the RSU node is 2, that is, `appl.dataPriority=2`. 
+- SCH does not apply to Mac1609.4 in the network interface, that is, `nic.mac1609_4.useServiceChannel=false`.
+
+- The module type in TraCIScenarioManager `moduleType=org.car2x.nodes.car`
+
+
+
+The modeling realization of the Car module, its specific design and composition are shown in Figure 4-6:
+
+<img src="vanet.assets/image-4-6.png" style="zoom:67%;" />
+
+Figure 4-6 Car node module structure
+
+
+
+As shown in Figure 4-6, the model of the vehicle node in SUMO in Omnet consists of `appl`, `nic` and `veinsmobility` modules. The parameters of Car are:
+
+- Car application layer type definition `node[*].applType=TraDIDemo11p`.
+
+
+- Car does not send periodic messages, sends data and no longer sends data on SCH, that is, `node[*].appl. sendBeacons=false`, `node[*].appl.sendData=true`, `node[*].appl.dataOnSch= false` .
+
+
+- Car sent data priority `node[*].appl.dataPriority=2`.
+
+
+- Car mobility wipes the real-time position, speed and acceleration of the vehicle in the traffic simulation SUMO, namely `node[*].veinsmobilityType=org.car2x.veins.modules.traci.TraCIMobility`.
+
+
+- In the simulation, a vehicle with a vehicle id of 0 has a traffic accident at 75s, and the accident duration is 30s.
+  That is, `node[*0].veinsmobility.accidentCount=1`, `node[*0].veinsmobility.AccidentStart=75s`, `node[*0],veinsmobility.accidentDuration=30s`.
+
+It can be seen from the simulation parameter configuration that in the simulation process, when the vehicle has a traffic accident, the data related to the traffic accident will be sent on the CCH, and the RSU will also forward the corresponding data after receiving the corresponding data.
+
+
+
+#### 4.2.3  Veins simulation process
+
+This section will analyze the message passing and function call in the Veins simulation process.
+
+1. In the `initialize()` function of the `TraCIMobility class`, `startAccidentMsg` is generated according to the `accidentStart` parameter set in the `omnetpp.ini` configuration file and added to the dispatch queue.
+
+2. When the `handleSelfMessage()` function of the `TraCIMobility` class handles the `startAccidentMsg` when a staff accident occurs. First call the `commandSetSpeed` function in the `TraCIMobility` class, set the driving speed of the corresponding vehicle in the SUMO simulation to 0 through the `TraCIScenarioManager` class. Then generate `stopAccidentMsg` according to the `accidentInterval` parameter set in `omnetpp.ini`, and add it to the message queue.
+
+3. The `handlePositionUpdate()` function in the `TraCIDemo11p` class obtains the current vehicle speed through the `getSpeed()` function of the `TraCIMobility` class. If the current vehicle speed is less than 1, and the time since the last update is greater than or equal to 10s, it is judged that the vehicle has a traffic accident. First, update the color of the corresponding node in the simulation scene to red; then, if the accident has not sent a safety message, that is, sendmessage is false, call the `sendMessage` function in the `TraCIDemo11p` class.
+
+
+
+At this point, the scene preparation work before sending the message has been completed, and the next step is the formal message generation phase. The first step in this phase is to generate a message.
+
+As mentioned in the first section of this chapter, Omnit++ uses messages to deal with communication issues between modules. The message file `msg` can realize the transmission of complex data through a custom data structure, or directly transmit simple character data. The Veins simulation framework uses the `WaveShortMessage.msg` file to define the data packet format in the VANET. Its instantiation is the safety message `WSM`, which is used to transmit traffic safety information between the vehicle and the vehicle, and between the vehicle and the roadside unit. The last message to be sent in step 3 mentioned above is the `WSM` message. Whenever a vehicle encounters a traffic safety-related event such as a traffic accident or traffic jam, it will call the corresponding function at the application layer to broadcast WSM messages. In order to disseminate safety information quickly, `WSM` has the characteristics of quick response and short size.
+
+Before calling the sendMessage function, `TraCIDemo11p` will first call the `populateWSM()` function to define the packet header. The data field `data` is put into the corresponding current road id information in SUMO by calling the `veinsmobility.getRoadId()` function.
+
+The content of the WSM message is shown in the figure below:
+
+<img src="vanet.assets/image-4-7.png" style="zoom:50%;" />
+
+Figure 4-7 WSM content
+
+
+
+Important information fields of `Waveshortmessage.msg` include:
+
+- senderAddress: The address of the sending node.
+
+
+- senderPos: The position of the sending node (indicated by coordinates).
+
+
+- timestamp: The timestamp of the time the letter was sent.
+
+
+- wsmData: The data field of the message, the payload of WSM, is provided by the higher layer.
+
+
+After finishing the preparations for sending the WSM message, the newly generated WSM will be passed to the lower layer protocol processing by the node. The node module calls the function `sendDown()` and the function is passed from the `appl` module to the `nic` module by the gate. In the nic module, it will be processed by the mac layer and the physical layer respectively. In order to simulate message processing more realistically, the `sendDelayDown()` function can be used to send the WSM to the lower module after a certain delay, which can simulate the time consumption of message processing by the OBU node under real conditions to a certain extent.
+
+
+
+4. The `sendMessage` of the `TraCIDemo11p` class first sets `sendMessage` to true, and then determines whether the sending channel of the data is SCH or CCH according to the `dataOnSch` parameter value; secondly, calls its parent class-the `populateWSM()` function in the `BaseWaveApplLayer` class for data framing; finally calls The `sendDown ()` function sends data to the `Mac1609_4` module in the protocol stack.
+
+   The parent class `BaseWaveApplLayer` realizes the communication and control between the `TraCIDemo11p` module at the application layer and the Mac layer module `Mac1609_4` by calling the `WaveAppToMac1609_4Interface.h` interface module.
+
+
+
+
+The next stage is message transmission. In this stage, the WSM message generated by the application layer will be received and processed by `MAC1609` and `nic80211p` and then sent by the wireless channel.
+
+
+
+5. After the `handleUpperMsg()` function in the `Mac1609_4` class receives the message, it adds the message to the EDCA queue of the corresponding channel according to the specified transmission channel type in the message, and uses the EDCA mechanism to send the message.
+
+
+
+According to the WAVE protocol, the transmission of safety messages in Veins does not require the use of TCP protocol and identity authentication mechanism (the purpose of safety messages is to broadcast current road information to surrounding nodes as soon as possible, without privacy). Veins uses the CCH control channel to broadcast the WSM message, and other nodes that receive the message will forward the message once if it receives the security message for the first time. This relay propagation can quickly deliver messages to distant nodes that cannot directly receive safety messages.
+
+In the message sending stage, the work of the Mac1609_4 module mainly includes the following points:
+
+- (1).  Determine the channel type (SCH, CCH) used by the wsm packet sent by the `appl` layer, and switch the channel.
+
+- (2). Put the WSM package into the EDCA queue and process it.
+
+- (3). Generate other parameters of `macPacket`
+
+- (4). Assign MAC address, assign source address and destination address for `macPacket`.
+
+- (5). Encapsulate and generate the mac layer format package of `Mac80211Pkt.msg`.
+
+- (6). When the edca queue mechanism is executed, the Mac layer format packet is sent to the phy physical layer, or discarded at the mac layer.
+
+
+
+Through the `Mac80211pToPhy11pInterface.h` interface, the Mac layer module `Mac1609_4` realizes the mutual control and communication with the physical layer module `PhyLayer80211p`.
+
+The main tasks of the `PhyLayer80211p` module in the simulation process are as follows:
+
+- (1). Set the attributes and encapsulate the MAC layer frame into `AirFrame.msg` package.
+
+- (2). Obtain signal fading, power and other information from the parameter configuration, and establish analog communication for this communication.
+
+- (3). Use decider to determine the timing of sending.
+
+- (4). Monitor the channel and prepare to receive information.
+
+- (5). Judge whether the receiving node can receive the message by calculating the signal strength.
+
+  
+
+After the `Phy80211p` module completes the corresponding work on the physical layer, the `Decider80211p` module takes over the AirFrame package and is responsible for handling the conflict avoidance and air transmission of the message. The monitoring function of whether the data packet can be sent and whether the current time slice is free is implemented by Decider.
+
+
+
+The final stage is the reception and processing of messages. This is basically the opposite of the message sending phase at the physical layer and the Mac layer. When the message is received by the `Phy80211p` module by the radioin gate and sent up to the `Mac1609_4` module, the Mac module will compare the Mac address in the frame and discard the messages that do not belong to itself. After the message is passed up from the `MAC1609_4` module layer to the application layer, the `onWSM()` function will coordinate with the SUMO and `TraCIScenarioManager` modules to do specific process on message.
+
+
+
+6. After other vehicles in the simulation network receive the traffic accident message, if their `TraCIDemo11p` class has not forwarded the message, the function is called to forward the traffic accident message. The RSU nodes in the network will also make the same message forwarding decision after receiving the message.
+
+The forwarding and processing of messages are implemented using the `onWSM()` function. It is divided into two versions according to the functions of RSU nodes and OBU nodes. The two differ only in handling movement and location information. After the message is sent to the application layer and received by the `onWSM()` function, the function obtains the data field of the WSM packet and obtains the `roadID` of the road section where the accident vehicle is located, and compares it with its current road section and the planned driving section. If you need to change the road to To avoid traffic congestion, the `changeRoad()` function will be called to use `TraCI` to re-plan the road for the vehicles in SUMO. After that, the forwarding judgment is performed as described in step 6.
 
 
 
