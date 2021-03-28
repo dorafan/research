@@ -170,3 +170,203 @@ Figure 2-5 above shows the framework of Omnit++. The SIM module provides the cor
 Omnet++ provides tools, interfaces and corresponding simulation frameworks for network simulation. It provides a wealth of C++ simulation prototypes. At the same time, Omnit++ provides a set of effective tools for system structure simulation: embedded layered modules.
 
 Omnet++ organizes and describes the network structure through the nesting of modules. Among them, a simple module is a module that realizes a simple single function. A new module formed by embedding multiple simple modules into one module is called a composite module. There is no limit to the nesting of modules, and when the module is instantiated, for users, there is no difference between a simple module and a conforming module. These features make it easy for users to divide a complex structure into multiple simple module stacks.
+
+
+
+![](vanet.assets/image-2-6.png)
+
+Figure 2-6 Module nesting digram
+
+
+
+Modules are connected through "Gate" or "interface" to communicate and realize module nesting. The input/output interface of the store module, the message is sent through the output gate, and received through the input gate. By connecting the doors to each other, messages can be transmitted between different sub-modules (simple modules) or connected with parent modules (composite modules). You can add content such as delay and acceleration while connecting the door.
+
+
+
+![](vanet.assets/imge 2-7.png)
+
+Figure 2-7 Module connection diagram
+
+
+
+The way to realize communication between modules connected to each other is to exchange information. The message can include any complex data structure. By defining the frames and packets in the network, it is possible to simulate the message propagation in the Internet of Vehicles.
+
+The Omnet++ simulation platform is divided into two modules: topology design and function programming. The physical node configuration uses NED language. NED (Network Description) language is used to describe the structure of the simulation model. The definition of a module is divided into four parts in the NED language: parameters, gates, submodules, and connections. Parameters can be directly described inside the module, or they can be assigned uniformly in omnet.ini.
+
+Each physical node must have a corresponding function definition, which is described in c++. Through flexible inheritance and interface mechanisms, more complex functions can be implemented for the module. You can also use the nesting mechanism of ned to write a single function for a simple module and then add a new function to the complex module formed by stacking. Omnet++ provides users with a rich class library. Users can quickly implement the functional description of the required network through inheritance and rewriting.
+
+
+
+#### 2.2.3  SUMO traffic simulation platform
+
+SUMO (Simulation of Urban Mobility) is an open source, micro, multi-mode traffic simulator. It can simulate the movement of a single vehicle in a given road network. Among them, each vehicle can be modeled in detail and has its own driving path; simulation parameters can be determined, or certain random parameters can be introduced. Because it complies with the GPL (General Public License) agreement, maps such as VISUM, VISSIM, Shapefiles, OSM or XML descriptions can be imported and used by SUMO. SUMO includes all relevant functions of traffic simulation, and can achieve the following functions in terms of modeling:
+
+1. Vehicle movement with continuous space and discrete time.
+2. Multi-lane roads with lane changes.
+3. Vehicle driving rules and traffic light rules
+4. openGL graphical interface.
+5. Interaction with other applications. 
+
+
+
+When using SUMO to build a traffic simulation model, the most important thing is road simulation and traffic flow model simulation. SUMO uses .xml files to describe the simulation environment. The main files related to simulation are as follows:
+
+
+
+*.net.xml: Road network file, which defines road information.
+
+*.rou.xml: Traffic flow file, which defines the route and behavior mode of vehicles.
+
+*.poly.xml: Terrain file, which defines buildings in the map as a parameter of signal fading. 
+
+*.launchd.xml: Establish communication with SUMO.
+
+*.sumo.cfg: Parameter configuration file, which defines the conditions of SUMO operation, such as running time.
+
+
+
+By using third-party open source maps, real map information can be quickly imported into SUMO. The more common method is to use openstreetMap to download the automatically generated osm map file, and then use the netconvert command to convert it to *.net.xml in SUMO. Another way is to use xml to manually write the traffic description file. The specific steps are as follows:
+
+1. Define the node file *.nod.xml: The definition of the node mainly gives the coordinates of the node. At the same time, the nodes can be described, such as setting intersections, setting passing priority, setting signal lights and driving rules, etc.
+
+2. Define the edge file *.edge.xml: define the edge to connect the defined nodes on the basis of the node definition. The side is directional. When the vehicle is driving along the side, it starts from the given from and ends with to. Edges can also define attributes, such as allow vehicles to pass.
+
+3. Use the netconvert command to integrate node.xml and edg.xml into net.xml.
+
+In rou.xml, the speed, size, generation time, and vehicle flow parameters of the vehicle can be described in detail. Make the traffic model closer to the actual traffic behavior and improve the accuracy of simulation analysis.
+
+
+
+#### 2.2.4  Veins vehicular network simulation platform
+
+In order to better model and simulate the vehicle network, it is necessary to combine the vehicle movement model with the network simulation. The relationship between the existing vehicle movement model and network simulation can be divided into two ways: open-loop coupling and closed-loop coupling. In the open-loop coupling, the vehicle's motion and network simulation are independent of each other and do not affect each other; in the closed-loop coupling, the vehicle's motion is not only used as the input and communication decision condition of the network simulation, but also the communication transmission in the network simulation. The structure will in turn affect or change the movement of the vehicle.
+
+Closed-loop coupling is divided into embedded coupling and joint closed-loop coupling. The joint closed-loop coupled vehicle networking modeling and simulation method is to jointly use the existing mature traffic simulator and network simulator, and communicate with certain criteria. The structure realizes the interaction, as shown in Figure 2-8:
+
+
+
+![](vanet.assets/image 2-8.png)
+
+Figure 2-8 Joint close-loop structure
+
+
+
+Compared with the embedded closed-loop coupling method, the joint closed-loop coupling mode simulation platform has traffic simulators and network simulators that have undergone extensive verification and are recognized as highly reliable platforms. VEINS is a traffic simulation and network simulation platform that uses SUMO and Omnet++, which are also based on C++, respectively. The communication interface uses TraCI, which is an excellent vehicle networking simulation framework.
+
+Veins (Vehicles in Network Simulation) is an open source Internet of Vehicles simulation platform based on Omnet++, which can conduct online interactive simulation with the SUMO traffic simulation platform through TraCI. Its composition system is shown in Figure 2-9:
+
+
+
+<img src="vanet.assets/image 2-9.png" style="zoom:67%;" />
+
+Figure 2-9 Veins framework structure
+
+
+
+Veins instantiates the vehicles in SUMO as nodes in the network, which is specifically implemented by the *TraCIScenarioManagerLaunchd* module in Omnet++. The *TraCIScenarioManagerLaunchd* module connects with SUMO to customize vehicle creation and vehicle movement messages. Each car created in SUMO will be instantiated as a composite module in Omnit++, and the composite module contains a mobility sub-module, *TraCIMobility*. The *TraCIMobility* module contains the function of stopping when the vehicle arrives at a predetermined position, that is, to realize the occurrence of traffic accidents in traffic simulation, and set the *accidentStart* and *accidentDuration* parameters accordingly. The application layer module in Veins can use the *TraCICommandInterface* class and related classes to obtain *TraCIMobility* parameters for information interaction with traffic simulation.
+
+As for network simulation, Veins uses the OMENT++ platform to define WAVE short messages (WSM) at the application layer, and gives WSM definitions to realize the sending of periodic Beacon messages and Data messages. Secondly, the MAC layer of Veins implements the EDCA mechanism based on IEEE802.11p and the multi-channel switching mechanism based on IEEE1609.4. Finally, the physical layer of Veins implements the functions of the physical layer based on IEEE802.11p. In terms of channels, Veins implemented a fading model of interference and building obstacles to simulate the unlimited signal transmission of the real Internet of Vehicles. In the Veins simulation, the configuration of the channel interference model and the building obstacle fading model is realized through the xml configuration file.
+
+
+
+### 2.3  the Principle of DDoS attack
+
+DDoS (Distributed Denial of Service) attack is a distributed denial of service attack. It can be considered that any behavior that causes legitimate users to be unable to access the service normally is a "denial of service" attack [14]. However, DoS attacks initiated by a single attacking node are limited by its own body’s computing power and network bandwidth. Service providers with strong service provision capabilities in traditional networks are sufficient to handle the requests of a single attacking node, while a large number of other attacking nodes are organized and coordinated. , Attack from different locations at the same time, this is "distributed".
+
+DDoS attacks are simple and difficult to prevent. It is one of the most threatening attacks on the Internet [6]. None of the current defense methods can effectively prevent DDoS attacks, and can only be countered by increasing resources. In the Internet of Vehicles environment, the rapidly changing topology environment, the shortage of wireless communication channel resources, and the vulnerabilities in the protocol have caused new changes in DDoS attacks. Especially in terms of security message dissemination, because Vanet uses short and simple WAVE Short Message (WAVE Short Message, WSM) broadcasts for security message dissemination, DDoS for security message dissemination has new features that are different from traditional networks.
+
+In the Internet, SYN Flood attacks are the most common DDoS attack. It uses the loopholes of the TCP protocol to shake hands three times to occupy a large amount of server half-open connection resources. However, the security messages in the Internet of Vehicles are transmitted by broadcast, and the TCP protocol is not used, so SYN attacks cannot be carried out. At the same time, the node that receives the WSM security message does not need to issue a receipt, so Smurf attacks and DRDOS attacks cannot be carried out.
+
+
+
+## 3  Design of DDoS Attack Against VANET
+
+### 3.1  VANET Data Transmision Vulnerability
+
+Through careful analysis of a typical VANET communication scenario, combined with the WAVE protocol used by the VANET, the most important security message propagation vulnerability of VANET can be analyzed.
+
+
+
+![](vanet.assets/image 3-1.png)
+
+Figure 3-1 communication scenario of VANET
+
+
+
+As shown in Figure 3-1, VANET communication is mainly in two aspects: OBU-OBU means vehicle-to-vehicle communication, and OBU-RSU means vehicle-roadside unit communication. The OBU node sends the safety message directly to the neighboring OBU node and RSU node through the broadcast method, and the RSU node and OBU node receiving the message will also forward the safety message. In this process, the sending of messages follows the WAVE protocol, and in order to quickly deliver public and secure messages, there is no privacy mechanism for the message itself. Limited by hardware performance and information disclosure requirements, there are no rigid requirements and effective means for the legal identity authentication of the sender. Therefore, it can be seen that V ANET communication has the following vulnerabilities:
+
+1. Every data transmission needs to use the CSMA/CA back-off mechanism, resulting in effective information may be squeezed into the channel by useless or attack information for a long time, and it is difficult to be transmitted and processed. As shown in the above figure, if there is a message burst, all OBU nodes and RSU nodes need to compete for the channel, which will cause a large number of message collisions.
+
+2. The secure broadcast message does not have identity authentication, and the content does not have valid authentication, so it is easy to be counterfeited by attackers. Each OBU in the figure above may be a malicious node or an illegal node.
+
+3. The sending node does not have valid identity authentication and cannot confirm whether it is a malicious node. The security messages transmitted between nodes in Figure 3-1 above do not have an effective security mechanism for verification.
+
+
+
+### 3.2  Design of Attack Scheme
+
+Based on the above information, this article designs a DDoS attack scheme for the propagation of secure messages.
+
+This experiment uses a flood attack method, using malicious OBU nodes and malicious RSU nodes to send a large amount of invalid information to other legitimate nodes in the network in a short period of time, thereby causing channel blockage, making effective security messages sent by legitimate nodes impossible be detected by subsequent nodes, and causing road congestion. This attack can make the attacked node continue to fall into the invalid information sent by the malicious node. From the perspective of the victims, most of the information received by the OBU node is directly sent by malicious nodes or false information forwarded by other nodes, which causes errors in the lane selection strategy and causes road congestion. And because the network is full of malicious information that is continuously accepted and forwarded, most of the messages received by RSU nodes are malicious messages. The forwarding and broadcasting of RSU will become part of the attack in disguise, causing more severe impact on subsequent vehicles.
+
+The attack process is shown in Figure 3-2:
+
+
+
+![](vanet.assets/image 3-2.png)
+
+Figure 3-2 the process of attack
+
+
+
+Step 1: The malicious node sends invalid information
+Step 2: An incident occurred in the network
+Step 3: The node where the accident occurred sends an accident message
+Step 4: Network congestion affects the dissemination of accident messages and even gets discarded
+
+Three sets of attack scenarios were designed in the experiment, and DDoS attacks were carried out against the accident vehicle, the receiving vehicle and the RSU node respectively.
+
+
+
+#### 3.2.1  DDoS attacks agains accident vehicle
+
+The attack scenario of this scheme is that when a traffic accident occurs, the target of the attack is the vehicle inverter in the traffic accident. To interfere with the normal security broadcast service interrupted by the interruption alarm. The attack process is as follows:
+
+![](vanet.assets/image 3-3.png)
+
+Figure 3-3 the communication process of attack scheme 1
+
+
+
+The message delivery and events in the entire attack process are shown in the figure above:
+
+1. The malicious node (the black car in yellow square) launches a DDoS attack on the node at the head of the traffic team (the set accident node).
+2. A traffic accident occurs at the vehicle node at the head of the team (the red car in red square).
+3. The accident node sends a security broadcast to the subsequent vehicle node (black car) and RSU while withstanding the DDoS attack.
+4. While the malicious node continues to attack the accident node, other nodes receive the message, broadcast and forward the message, and generate redundant information which is repeatedly received by the node.
+
+
+
+#### 3.2.2  attack scheme against information receiving nodes
+
+![](vanet.assets/image 3-4.png)
+
+Figure 3-4 Schematic diagram of attack plan 1 & 2 model
+
+
+
+In Figure 3-4 above, the black vehicles are malicious nodes, the gray vehicles are legitimate OBU nodes, and the red arrows represent malicious nodes attacking them.
+
+The message delivery and events in the entire attack process are shown in the following figure 3-5:
+
+1. The yellow malicious node launches a DDoS attack on the attacked node.
+2. The vehicle node at the head of the team has a traffic accident and sends a safety broadcast to the subsequent vehicle nodes and RSU.
+3. The attacked node receives and forwards the security message broadcast by the accident node while withstanding the DDoS attack.
+4. While the malicious node continues to attack the attacked node, other nodes receive the message, broadcast and forward the message, and generate redundant information that is repeatedly received by the node. The attacked node can be within the coverage of the one-hop message of the accident node, or it can be at the remote end (relayed by other nodes). The location of the attacked node on the way is for illustration only.
+
+
+
+
+
+
+
