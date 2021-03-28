@@ -183,7 +183,7 @@ Modules are connected through "Gate" or "interface" to communicate and realize m
 
 
 
-![](vanet.assets/imge 2-7.png)
+![](vanet.assets/image-2-7.png)
 
 Figure 2-7 Module connection diagram
 
@@ -245,7 +245,7 @@ Closed-loop coupling is divided into embedded coupling and joint closed-loop cou
 
 
 
-![](vanet.assets/image 2-8.png)
+![](vanet.assets/image-2-8.png)
 
 Figure 2-8 Joint close-loop structure
 
@@ -257,7 +257,7 @@ Veins (Vehicles in Network Simulation) is an open source Internet of Vehicles si
 
 
 
-<img src="vanet.assets/image 2-9.png" style="zoom:67%;" />
+<img src="vanet.assets/image-2-9.png" style="zoom:67%;" />
 
 Figure 2-9 Veins framework structure
 
@@ -287,7 +287,7 @@ Through careful analysis of a typical VANET communication scenario, combined wit
 
 
 
-![](vanet.assets/image 3-1.png)
+![](vanet.assets/image-3-1.png)
 
 Figure 3-1 communication scenario of VANET
 
@@ -313,7 +313,7 @@ The attack process is shown in Figure 3-2:
 
 
 
-![](vanet.assets/image 3-2.png)
+![](vanet.assets/image-3-2.png)
 
 Figure 3-2 the process of attack
 
@@ -332,7 +332,7 @@ Three sets of attack scenarios were designed in the experiment, and DDoS attacks
 
 The attack scenario of this scheme is that when a traffic accident occurs, the target of the attack is the vehicle inverter in the traffic accident. To interfere with the normal security broadcast service interrupted by the interruption alarm. The attack process is as follows:
 
-![](vanet.assets/image 3-3.png)
+![](vanet.assets/image-3-3.png)
 
 Figure 3-3 the communication process of attack scheme 1
 
@@ -349,7 +349,7 @@ The message delivery and events in the entire attack process are shown in the fi
 
 #### 3.2.2  attack scheme against information receiving nodes
 
-![](vanet.assets/image 3-4.png)
+![](vanet.assets/image-3-4.png)
 
 Figure 3-4 Schematic diagram of attack plan 1 & 2 model
 
