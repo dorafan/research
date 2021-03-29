@@ -673,5 +673,169 @@ The forwarding and processing of messages are implemented using the `onWSM()` fu
 
 
 
+### 4.3  Simulation Platform Construction
+
+#### 4.3.1  construction of simulation software and system
+
+The LTE function of Veins can only run in the Linux environment. Considering the follow-up research of the simulation platform, this experiment is built in the ubuntu virtual system.
+
+By calling the command `python sumo-launchd.py –vv –c sumo-gui`, you can start the python monitoring script, start a SUMO instance listening port 9999 at the beginning of the simulation experiment, and communicate with Veins through the TraCI protocol.
 
 
+
+#### 4.3.2  basic scenario establishment
+
+First, establish the basic traffic flow model of the simulation scenario. Considering that traffic congestion caused by traffic accidents has the greatest impact on the intensive traffic flow, this experiment builds a traffic model based on the vehicle following model.
+
+
+
+Set the number 0 car to have a car accident at the simulation time of 75s. The duration is 50s. Such a setting can make it impossible for several car nodes following car No. 0 to make the way in time, resulting in congestion. At the same time, the single report of car 0 is not enough to be transmitted to the remote vehicle node. It must be relayed by other vehicles. The actual impact of network information on the traffic flow can be observed. DDoS attacks on this basis are also more effective. The impact of the attack was observed.
+
+The related parameter configuration has been described in detail in the previous article, so I won't introduce it again.
+
+After configuring the relevant parameters and models of the experiment, the basic scenario is simulated as a comparison experiment for subsequent attack scenarios.
+
+![](vanet.assets/image-4-8.png)
+
+Figure 4-8 node topology diagram of basic simulation scenario
+
+
+
+As shown in Figure 4-8, the red node No. 0 is the accident generation node in the setting, and it is also the head of the vehicle following model. No. 7 node is within the coverage of a single transmission of No. 0 node, and No. 14 node is outside the signal coverage of No. 0 node, and the accident message must be received through the relay of the preceding vehicle.
+
+The accident node is set to car number 0. At 75s, the node starts the vehicle stop command according to the parameter setting. The vehicle started the accident determination timing at 76s and started to move again at 126s.
+
+Figure 4-9 shows the basic scenario of node 0, node 7, and node 14 and the entire network data.
+
+<img src="vanet.assets/image-4-9.png" style="zoom: 67%;" />
+
+Figure 4-9 data of node 0, node 7, node 14 and the network in the basic scenario
+
+
+
+As shown in Figure 4-9, when there is no malicious attack node in the VANET network, the message can be smoothly delivered to the node in time by broadcasting. Node 0 sent a safety message broadcast for the first time at 86s, and node 7 within one hop of it received the traffic accident message of node 0 at 86.0002s (approximately to the fourth decimal place) and processed it. . Due to the relay and forwarding mechanism established by the WAVE protocol, car No. 7 and other nodes that received the message broadcast of car No. 0 will forward the message, so it can be seen that car No. 7 has received a total of 27 traffic before the road is unblocked. Safely broadcast messages. The palm time of the last time was 90.3557s, which was only about 4 seconds after the car accident was judged and the first message was sent, and the average time was 0.15s.
+
+It can be seen that the 14th node that needs to forward the message to receive the message first received the message at 88.0123s, which is about 2s latter from the first message broadcast. Considering that the node will have a processing time of 2s from receiving the message to forwarding the message, it can be considered that the reception delay of node 14 is almost zero, and the message is received in time. From the first reception to the last reception, the sharing time is about 4s, 17 data packets are received, and the average duration is 0.24s. It can be seen that the vehicle node far away from the accident source node has a longer reception delay. .
+
+Due to the safety message broadcasting of the Internet of Vehicles, a large amount of communication occurs in a short time after the accident. Therefore, it can be regarded as a sudden process. In this process, because the WAVE protocol uses a back-off mechanism and redundant messages, each node will generate conflict back-off.
+
+In the case of an basic scenario without any attack, the number of receiving nodes is 30, the number of received broadcast packets is 584, and a total of 40 data transmissions have been carried out. Therefore, the signal-to-noise ratio of the entire network at this time is R≈26.4.
+
+In the case of not receiving an attack, starting from the 13th car, because it received the road accident broadcast message in time and did not drive into the road section where the accident occurred, the road can be changed in time. It can be seen that the vehicle made a U-turn and drove away from the congested road.
+
+![](vanet.assets/image-4-10.png)
+
+Figure 4-10 road-change diagram
+
+
+
+### 4.4  Data Analysis
+
+This section is the realization and analysis of the attack scheme in Chapter 3. Mainly collect data for analysis:
+
+- `GeneratedWSMs`: The total number of WSM data packets sent out by this node during the simulation process.
+- `ReceivedWSMs`: The total number of WSM data packets received by this node during the simulation process.
+- `ReceivedEVILWSMs`: The number of times the node was attacked during the simulation.
+- `ReceivedRSU`: The number of packets forwarded from the RSU node received by this node during the simulation process.
+- `SlotsBackoff`: The number of backoff time slices for this node due to conflicts during the simulation.
+- `ReceivedTimes[]`: The specific time of the message packet received by the node during the simulation process.
+
+Based on the purpose of the attacking node, the problem of receiving the attacking node is not considered.
+
+
+
+#### 4.4.4  conclusion of scenario analysis
+
+Through the comparison of 5 sets of experimental data, it can be concluded that when multiple nodes attack the car nodes within the coverage of one hop signal of the vehicle in the accident, it will have a greater impact on the propagation of the safety message broadcast, which will make the remote car node havs obvious delays in the reception of accident information,  making it impossible to run the road guide service in time. The attack will also have a greater impact on network quality, increasing the packet loss rate, and the time slice conflicts.
+
+
+
+#### 4.4.5  Attack intensity test
+
+It can be seen that due to the increase in attack intensity, the number of attacks has increased significantly, but the attack effect is not positively correlated with the attack intensity as expected.
+
+From the experimental data, increasing the attack intensity has no obvious impact on the security message broadcast between vehicle nodes. It can be seen that the number of time slice conflicts increases significantly with the increase of attack intensity and number of attacks, especially concentrated on attacking nodes. It did not cause more message conflicts between OBU nodes to back off. This means that the attacking node in VANET will not gain communication advantage due to the unlimited increase in attack intensity, and each attack still needs to compete for the time slice with other legitimate nodes. It can only reduce the network signal-to-noise ratio, increase network load and packet loss rate, and cannot completely hinder the dissemination of effective security information.
+
+
+
+## 5  Conlusion
+
+### 5.1  Simulation Review
+
+This article mainly discusses the possible impact and characteristics of DDoS attacks in VANET networks. With the promotion and popularity of the concept of the Internet of Things, the plan for the Internet of Everything to enter people's lives has been put on the agenda. The Internet of Vehicles, as a way to solve traffic, safety and environmental problems, is essential to the study of the possible security threats. By using the simulation environment to study the Internet of Vehicles, the research cost can be reduced, and the research theory can be quickly verified in practice. As the most threatening attack method in traditional networks, it is necessary to analyze and simulate the possible impact of DDoS in VANET.
+
+The main work of this paper is as follows:
+
+1. Introduced the research background and significance of the Internet of Vehicles VANET, as well as the current Internet of Vehicles technology and research status.
+
+2. Analyzed the working principle and possible vulnerabilities of the VANET based on the WAVE protocol family, and designed a corresponding DDoS attack plan.
+
+3. Introduced the simulation platforms Omnet++, SUMO, Veins. And introduced the working process of the simulation platform.
+4. Based on the previous article, a multi-scenario comparison experiment was designed, and through data collection for comparison, the factors that may affect DDoS attacks and the impact of attacks on VANET were analyzed.
+
+Through experimental analysis, it can be seen that DDoS attacks will have a certain degree of impact on the VANET network, increase network burden, reduce transmission quality, increase transmission delay, and make messages unable to be delivered in time. However, the attack has an upper limit of impact, and it cannot completely block the sending and service of legitimate nodes.
+
+
+
+### 5.2  Issues and Outlook
+
+This design has the following problems:
+
+1. Use an overly idealized simulation environment, which is far from the real scene.
+
+2. The simulation platform is based on discrete events for simulation, and there is a time difference between each event, which makes it difficult to achieve true
+parallel processing.
+
+3. The processing capacity of the simulation environment is limited by the hardware platform, and it is difficult to handle large-scale and high-intensity scenarios and large-scale data.
+
+4. This experiment focused on the attacks against security messages, but did not discuss service messages.
+
+Although this experiment did not reach the ideal level of completely blocking the sending or receiving of the node, the threat of DDoS attacks to VANET can still be seen. Currently, the VANET lacks node identity authentication and data privacy processing, and there is no good way to deal with malicious attacks. In addition to designing more secure identification and data encryption, the Real-time monitoring of data and making autonomous defense strategies is a possible way to defend against DDoS attacks [15].
+
+![](vanet.assets/image-5-1.png)
+
+Figure 5-1 DSRC/WAVE protocol's channel condition under attack
+
+
+
+As shown in Figure 5-1 above, since VANET uses 7 channels, it needs to select a channel for communication every time before sending a message. When a legitimate node detects an abnormality in the data flow in the network, it can negotiate with other legitimate nodes to quickly change the communication channel to avoid communicating through the channel that has been attacked and that is no longer secure, so as to temporarily exclude malicious nodes from communication network [15]. Through these channel assignments, whenever an attacker blocks any channel, he can choose to move to other channels. In this way, network availability can be obtained, thereby rejecting DOS attacks.
+
+
+
+The DDoS attack scenarios designed in this simualtion could also be used to implement other attacks, such as relay attack and fake message attack. Also, veins frame provides a network layer interface, which means user could implement blackhole attack. 
+
+
+
+
+
+## Reference 
+
+[1] Toor Y, Muhlethaler P, Laouiti A, et al. Vehicle ad hoc networks: Applications and related technical issues[J]. IEEE communications surveys & tutorials, 2008, 10(3): 74-88.
+
+ [2] 李明.VANET中基于802.11p的信道分配机制研究[D].吉林大学,2015.
+
+ [3] Raya M, Papadimitratos P, Hubaux J P. Securing vehicular communications[J]. IEEE wireless communications, 2006, 13(5): 8-15.
+
+[4] Lin X, Lu R, Zhang C, et al. Security in vehicular ad hoc networks[J]. IEEE communications magazine, 2008, 46(4): 88-95.
+
+ [5] Dar K, Bakhouya M, Gaber J, et al. Wireless communication technologies for ITS applications [Topics in Automotive Networking][J]. IEEE Communications Magazine, 2010, 48(5): 156-162. 
+
+[6] 冯柳平, 刘祥南. 基于 IEEE802. 11 认证协议的 DoS 攻击[J]. 计算机应用, 2005, 25(03): 546-547.
+
+[7] 郭晋杰. 基于 IEEE 1609480211p 的智能交通系统的跨层优化[D]. 北京邮电大学, 2013. 
+
+[8] Campolo C, Vinel A, Molinaro A, et al. Modeling broadcasting in IEEE 802.11 p/WAVE vehicular networks[J]. IEEE Communications letters, 2010, 15(2): 199-201.
+
+[9] IEEE Guide for Wireless Access in Vehicular Environment (WAVE) – Architecture[J]. 2014:1- 77.
+
+[10] 付浩彬.VANET下的无中心网络安全认证机制[D].吉林大学,2014.
+
+[11] 周延熙. 面向车队自组网的移动模型及其多信道多跳路由协议研究[D]. 华南理工大学, 2014.
+
+[12] 孙宁.VANET中DoS攻击仿真研究[D].吉林大学,2017.
+
+[13] 吴振华胡鹏.VANET中路由协议分析[D].南昌航空大学软件学院,2015.
+
+[14] 刘亚光.基于Linux防御拒绝服务系统的研究与实现[D].天津大学,2006. 
+
+[15] Hasbullah H, Ahmed Soomro I, Ab Manan J. Denial of service (DOS) attack and its possible solutions in VANET[J]. World Academy of Science, Engineering and Technology (WASET), 2010, 65: 411-415.
