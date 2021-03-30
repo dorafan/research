@@ -1,11 +1,11 @@
 ### Authentication and Authorization Attacks and Defenses
 
-- [Key Reinstallation Attacks: Forcing Nonce Reuse in WPA2](./Key Reinstallation Attacks Forcing Nonce Reuse in WPA2.pdf) , Mathy Vanhoef, Frank Piessens, CCS 2017. 
-- [The Dangers of Key Reuse: Practical Attacks on IPsec IKE ](./The Dangers of Key Reuse.pdf), Dennis Felsch et al., USENIX 2018. 
-- [Security Analysis of Emerging Smart Home Applications](./Security Analysis of Emerging Smart Home Applications.pdf) , Earlence Fernandes et al., IEEE S&P 2016. 
-- [SmartAuth: User-Centered Authorization for the Internet of Things ](./SmartAuth User-Centered Authorization for the Internet of Things.pdf), Yuan Tian et al., USENIX 2017. 
-- [Breaking and Fixing Mobile App Authentication with OAuth2.0-based Protocols ](./Breaking and Fixing Mobile App Authentication with.pdf), Ronghai Yang et al., ICACNS 2017.
-- [Sensitive Information Tracking in Commodity IoT ](./Sensitive Information Tracking in Commodity IoT.pdf), Z. Berkay Celik et al., USENIX 2018. 
+- [Key Reinstallation Attacks: Forcing Nonce Reuse in WPA2]() , Mathy Vanhoef, Frank Piessens, CCS 2017. 
+- [The Dangers of Key Reuse: Practical Attacks on IPsec IKE ](), Dennis Felsch et al., USENIX 2018. 
+- [Security Analysis of Emerging Smart Home Applications]() , Earlence Fernandes et al., IEEE S&P 2016. 
+- [SmartAuth: User-Centered Authorization for the Internet of Things ](), Yuan Tian et al., USENIX 2017. 
+- [Breaking and Fixing Mobile App Authentication with OAuth2.0-based Protocols ](), Ronghai Yang et al., ICACNS 2017.
+- [Sensitive Information Tracking in Commodity IoT ](), Z. Berkay Celik et al., USENIX 2018. 
 
 
 
