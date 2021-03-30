@@ -20,7 +20,7 @@ I have studied VANET (Vehicular Ad hoc Networks) and have done the simulation of
 
 
 
-[DNS Defense and Security Investigation](./dns survey.pdf)
+[DNS Defense and Security Investigation](./dns-survey.pdf)
 
 a survey on DNS security enhancement, writen with my project member.
 
