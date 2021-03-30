@@ -14,3 +14,6 @@ I have learned and analyzed VANET (Vehicular Ad hoc Networks), and have done the
 
 
 
+[Paper review -- wireless and mobile security](./paper review/wireless and mobile security/list.md)
+
+some notes about security paper

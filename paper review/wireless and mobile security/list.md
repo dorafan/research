@@ -11,7 +11,11 @@
 
 ### Privacy Violations and Preservations
 
--  [Differentially-Private Control-Flow Node Coverage for Software Usage Analysis]() , H, Zhang et al., USENIX 2020. 
+- [TaintDroid: An Information-Flow Tracking System for Realtime Privacy Monitoring on Smartphones]() , William Enck et al., ACM Transactions on Computer Systems (TOCS) 2014. 
+- [SoK: Privacy on Mobile Devices – It’s Complicated ](), Chad Spensky et al., Proceedings on Privacy Enhancing Technologies 2016. 
+- [PowerSpy: Location Tracking Using Mobile Device Power Analysis]() , Yan Michalevsky et al., USENIX 2015. 
+
+- [Differentially-Private Control-Flow Node Coverage for Software Usage Analysis]() , H, Zhang et al., USENIX 2020. 
 - [Understanding South African Mobile Users' Perception of Privacy and Current Behaviors on Facebook and WhatsApp]() , J, Reichel et al., USENIX 2020. 
 - [Fawkes: Protecting Privacy against Unauthorized Deep Learning Models]() , K, Murdock et al., USENIX 2020. 
 
