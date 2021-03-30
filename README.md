@@ -14,7 +14,17 @@ I have learned and analyzed VANET (Vehicular Ad hoc Networks), and have done the
 
 
 
+DNS Defense and Security Investigation
+
+a survey on DNS security enhancement, writen with my project member.
+
+
+
+
+
 [Paper review -- wireless and mobile security](https://github.com/dorafan/research/blob/main/paper%20review/wireless%20and%20mobile%20security/list.md)
 
-some notes about security paper
+some notes about security paper I have read
+
+
 
