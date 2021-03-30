@@ -4,17 +4,17 @@
 
 I use this repository to record my learning process.
 
-I'm very interested in mobile and wireless security. And wish to go futher on any research in cybersecurity. 
+I'm very interested in mobile and wireless security. And wish to go further on any cybersecurity research.
 
 
 
 [research and simulation of cyberattacks in VANET](https://github.com/dorafan/research/blob/main/VANET/research%20and%20simulation%20of%20Cyberattacks%20in%20VANET.md)
 
-I have learned and analyzed VANET (Vehicular Ad hoc Networks), and have done the simulation of cyberattacks in VANET on different scenarios.  This project is based on veins platform, a simulation platform which could connect vehicles movement with network situation. However, it seems that there is few tutorials about veins, so I decide to share my experience of veins platform and VANET protocol.
+I have studied VANET (Vehicular Ad hoc Networks) and have done the simulation of cyberattacks in VANET on different scenarios. The influence of the attacks is also concluded based on the experiment data.  This project runs on the veins platform, a simulation platform connecting vehicle movement with network situations. However, there are few tutorials about veins, so I decided to share my veins platform and VANET protocol experience.
 
 
 
-DNS Defense and Security Investigation
+[DNS Defense and Security Investigation]()
 
 a survey on DNS security enhancement, writen with my project member.
 
