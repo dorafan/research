@@ -37,6 +37,8 @@
 5. [Speechless: Analyzing the Threat to Speech Privacy from Smartphone Motion Sensors]() , S Abhishek Anand et al., IEEE S&P 2018.
 6. [When CSI Meets Public WiFi: Inferring Your Mobile Phone Password via WiFi Signals]() , Mengyuan Li et al., CCS 2016. 
 
+[The presentation of 6 When CSI Meets Public WiFi](https://github.com/dorafan/research/blob/main/paper%20critique/wireless%20and%20mobile%20security/pre-infer%20password%20using%20csi.pdf) 
+
 
 
 ### Voice Control Systems Security
@@ -54,3 +56,6 @@
 3. [SpecFuzz: Bringing Spectre-type Vulnerabilities to the Surface]() , O, Oleksenko et al., USENIX 2020. 
 
  
+
+
+
