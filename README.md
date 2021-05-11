@@ -2,9 +2,9 @@
 
 
 
-I use this repository to record my learning process.
+I use this repository to record my learning experience.
 
-I'm very interested in mobile and wireless security. And wish to go further on any cybersecurity research.
+I'm very interested in mobile and wireless security. And wish to go further on any cybersecurity  and network research.
 
 
 
@@ -28,9 +28,11 @@ a survey on DNS security enhancement, writen with my project member.
 
 
 
-[Paper review -- wireless and mobile security](https://github.com/dorafan/research/blob/main/paper%20review/wireless%20and%20mobile%20security/list.md)
+[Paper critique -- wireless and mobile security](https://github.com/dorafan/research/blob/main/paper%20review/wireless%20and%20mobile%20security/list.md)
 
 some notes about security paper I have read
 
 ------
+
+
 
