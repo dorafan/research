@@ -20,9 +20,9 @@ I have studied VANET (Vehicular Ad hoc Networks) and have done the simulation of
 
 
 
-[DNS Defense and Security Investigation](https://github.com/dorafan/research/blob/main/paper%20critique/wireless%20and%20mobile%20security/dns-survey.pdf)
+[Research on Webassembley Runtime Security (In Progress)](https://github.com/dorafan/research/tree/main/Webassembly)
 
-a survey on DNS security enhancement, writen with my project member.
+webassembly is a specification, and has many different implementations. These runtimes are built in totally different way. How to find their potential semantic error efficiently is a problem. And I'm working on it with my instructor. 
 
 ------
 
@@ -30,20 +30,20 @@ a survey on DNS security enhancement, writen with my project member.
 
 [Paper critique -- wireless and mobile security](https://github.com/dorafan/research/blob/main/paper%20critique/wireless%20and%20mobile%20security/list.md)
 
-some notes about security paper I have read
+some notes about security paper I have read and discussed  with my group. 
 
 ------
 
 
 
-Distributed System Project -- a basic cache system
+[Distributed System Project -- a basic cache system](https://github.com/dorafan/research/tree/main/DistSys)
 
-this is my Distributed System course project, implement with my  team mates.  
+this is my Distributed System course project, implement with my  team mates.  Simple, but I like it. 
 
 ------
 
 
 
-Research on Webassembley Runtime Security (In Progress)
+
 
  

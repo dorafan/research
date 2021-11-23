@@ -1,4 +1,4 @@
-i use a slide to record my work progress. 
+I use a slide to record my work progress. 
 
 The goal is to find an efficient methodology to find potential semantic errors in Webassembly runtimes implemented in different ways.
 
