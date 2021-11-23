@@ -1,6 +1,6 @@
 # DistSys Project start-up
 
-this project contains : literature, design, and final report
+this project contains : [literature](./literature.pdf), [design](./design.pdf), and [final report](./final report.pdf)
 
 ### Implementation Focused
 
